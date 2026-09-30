@@ -1,0 +1,845 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Preserver Trans LLC - Available Trucks</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #f4f5f7;
+    color: #222;
+}
+
+header {
+    background: #111;
+    color: white;
+    padding: 18px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.logo {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.logo span {
+    color: #d4af37;
+}
+
+nav button {
+    background: #d4af37;
+    color: #111;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-left: 5px;
+}
+
+nav button:hover {
+    opacity: 0.85;
+}
+
+.page {
+    display: none;
+    max-width: 1100px;
+    margin: auto;
+    padding: 25px 15px;
+}
+
+.page.active {
+    display: block;
+}
+
+.hero {
+    background: #111;
+    color: white;
+    padding: 30px 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+.hero h1 {
+    color: #d4af37;
+    margin-bottom: 8px;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.stat {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.stat h2 {
+    color: #d4af37;
+    font-size: 30px;
+}
+
+.search-box {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.search-box input,
+.search-box select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    margin-top: 8px;
+}
+
+.truck-list {
+    display: grid;
+    gap: 15px;
+}
+
+.truck {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    border-left: 5px solid #d4af37;
+}
+
+.truck-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.truck-number {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.available {
+    background: #dff5e1;
+    color: #16752b;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.info {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.info div {
+    background: #f5f5f5;
+    padding: 10px;
+    border-radius: 6px;
+}
+
+.info strong {
+    display: block;
+    font-size: 12px;
+    color: #777;
+    margin-bottom: 3px;
+}
+
+.form-card {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 6px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+.form-group textarea {
+    min-height: 90px;
+    resize: vertical;
+}
+
+.save-btn {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    background: #d4af37;
+    color: #111;
+    border-radius: 7px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.save-btn:hover {
+    opacity: 0.85;
+}
+
+.delete-btn {
+    margin-top: 15px;
+    padding: 8px 12px;
+    border: none;
+    background: #c62828;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.empty {
+    background: white;
+    padding: 30px;
+    text-align: center;
+    border-radius: 10px;
+}
+
+footer {
+    text-align: center;
+    padding: 25px;
+    color: #777;
+}
+
+@media(max-width: 700px) {
+    .stats {
+        grid-template-columns: 1fr;
+    }
+
+    .info {
+        grid-template-columns: 1fr;
+    }
+
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    nav button {
+        margin-left: 0;
+        margin-right: 5px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+    <div class="logo">
+        PRESERVER <span>TRANS LLC</span>
+    </div>
+
+    <nav>
+        <button onclick="showPage('home')">
+            Available Trucks
+        </button>
+
+        <button onclick="showPage('add')">
+            + Add Truck
+        </button>
+    </nav>
+
+</header>
+
+
+<!-- ================= HOME PAGE ================= -->
+
+<section id="homePage" class="page active">
+
+    <div class="hero">
+        <h1>Available Trucks</h1>
+        <p>Current truck availability for brokers</p>
+    </div>
+
+
+    <div class="stats">
+
+        <div class="stat">
+            <h2 id="totalTrucks">0</h2>
+            <p>Total Trucks</p>
+        </div>
+
+        <div class="stat">
+            <h2 id="todayTrucks">0</h2>
+            <p>Available Today</p>
+        </div>
+
+        <div class="stat">
+            <h2 id="tomorrowTrucks">0</h2>
+            <p>Available Tomorrow</p>
+        </div>
+
+    </div>
+
+
+    <div class="search-box">
+
+        <label><strong>Search Trucks</strong></label>
+
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="Search by city, state, truck or destination..."
+            oninput="displayTrucks()"
+        >
+
+    </div>
+
+
+    <div id="truckList" class="truck-list"></div>
+
+</section>
+
+
+
+<!-- ================= ADD TRUCK PAGE ================= -->
+
+<section id="addPage" class="page">
+
+    <div class="hero">
+        <h1>Add Truck</h1>
+        <p>Add your available truck information</p>
+    </div>
+
+
+    <div class="form-card">
+
+        <div class="form-group">
+            <label>Truck Number</label>
+            <input
+                type="text"
+                id="truckNumber"
+                placeholder="Example: Truck 101"
+            >
+        </div>
+
+
+        <div class="form-group">
+            <label>Driver Name</label>
+            <input
+                type="text"
+                id="driverName"
+                placeholder="Driver name"
+            >
+        </div>
+
+
+        <div class="form-group">
+            <label>Current Location</label>
+            <input
+                type="text"
+                id="location"
+                placeholder="Example: Fontana, CA"
+            >
+        </div>
+
+
+        <div class="form-group">
+            <label>Available Date</label>
+            <input
+                type="date"
+                id="availableDate"
+            >
+        </div>
+
+
+        <div class="form-group">
+            <label>Available Time</label>
+            <input
+                type="time"
+                id="availableTime"
+            >
+        </div>
+
+
+        <div class="form-group">
+            <label>Destination / Preferred Lane</label>
+            <input
+                type="text"
+                id="destination"
+                placeholder="Example: Washington / Oregon"
+            >
+        </div>
+
+
+        <div class="form-group">
+            <label>Truck Type</label>
+
+            <select id="truckType">
+
+                <option value="53' Dry Van">
+                    53' Dry Van
+                </option>
+
+                <option value="Reefer">
+                    Reefer
+                </option>
+
+                <option value="Flatbed">
+                    Flatbed
+                </option>
+
+                <option value="Other">
+                    Other
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="form-group">
+            <label>Contact Phone</label>
+            <input
+                type="tel"
+                id="phone"
+                placeholder="Phone number"
+            >
+        </div>
+
+
+        <div class="form-group">
+            <label>Notes</label>
+
+            <textarea
+                id="notes"
+                placeholder="Additional information..."
+            ></textarea>
+
+        </div>
+
+
+        <button class="save-btn" onclick="saveTruck()">
+            SAVE TRUCK
+        </button>
+
+    </div>
+
+</section>
+
+
+
+<footer>
+    Preserver Trans LLC © 2026
+</footer>
+
+
+
+<script>
+
+let trucks = JSON.parse(
+    localStorage.getItem("preserverTrucks")
+) || [];
+
+
+
+function showPage(page) {
+
+    document.getElementById("homePage")
+        .classList.remove("active");
+
+    document.getElementById("addPage")
+        .classList.remove("active");
+
+
+    if (page === "home") {
+
+        document.getElementById("homePage")
+            .classList.add("active");
+
+        displayTrucks();
+
+    } else {
+
+        document.getElementById("addPage")
+            .classList.add("active");
+
+    }
+
+}
+
+
+
+function saveTruck() {
+
+    const truckNumber =
+        document.getElementById("truckNumber").value.trim();
+
+    const driverName =
+        document.getElementById("driverName").value.trim();
+
+    const location =
+        document.getElementById("location").value.trim();
+
+    const availableDate =
+        document.getElementById("availableDate").value;
+
+    const availableTime =
+        document.getElementById("availableTime").value;
+
+    const destination =
+        document.getElementById("destination").value.trim();
+
+    const truckType =
+        document.getElementById("truckType").value;
+
+    const phone =
+        document.getElementById("phone").value.trim();
+
+    const notes =
+        document.getElementById("notes").value.trim();
+
+
+    if (
+        !truckNumber ||
+        !location ||
+        !availableDate
+    ) {
+
+        alert(
+            "Please enter Truck Number, Location and Available Date."
+        );
+
+        return;
+
+    }
+
+
+    const truck = {
+
+        id: Date.now(),
+
+        truckNumber: truckNumber,
+
+        driverName: driverName,
+
+        location: location,
+
+        availableDate: availableDate,
+
+        availableTime: availableTime,
+
+        destination: destination,
+
+        truckType: truckType,
+
+        phone: phone,
+
+        notes: notes
+
+    };
+
+
+    trucks.push(truck);
+
+
+    localStorage.setItem(
+        "preserverTrucks",
+        JSON.stringify(trucks)
+    );
+
+
+    alert("Truck saved successfully!");
+
+
+    document.getElementById("truckNumber").value = "";
+    document.getElementById("driverName").value = "";
+    document.getElementById("location").value = "";
+    document.getElementById("availableDate").value = "";
+    document.getElementById("availableTime").value = "";
+    document.getElementById("destination").value = "";
+    document.getElementById("phone").value = "";
+    document.getElementById("notes").value = "";
+
+
+    showPage("home");
+
+}
+
+
+
+function displayTrucks() {
+
+    const list =
+        document.getElementById("truckList");
+
+    const search =
+        document.getElementById("searchInput")
+        .value
+        .toLowerCase();
+
+
+    let filtered =
+        trucks.filter(function(truck) {
+
+            return (
+
+                truck.truckNumber
+                    .toLowerCase()
+                    .includes(search)
+
+                ||
+
+                truck.location
+                    .toLowerCase()
+                    .includes(search)
+
+                ||
+
+                truck.destination
+                    .toLowerCase()
+                    .includes(search)
+
+                ||
+
+                truck.truckType
+                    .toLowerCase()
+                    .includes(search)
+
+            );
+
+        });
+
+
+    document.getElementById("totalTrucks")
+        .innerText = trucks.length;
+
+
+    const today =
+        new Date()
+        .toISOString()
+        .split("T")[0];
+
+
+    const tomorrowDate =
+        new Date();
+
+    tomorrowDate.setDate(
+        tomorrowDate.getDate() + 1
+    );
+
+
+    const tomorrow =
+        tomorrowDate
+        .toISOString()
+        .split("T")[0];
+
+
+    document.getElementById("todayTrucks")
+        .innerText =
+        trucks.filter(
+            t => t.availableDate === today
+        ).length;
+
+
+    document.getElementById("tomorrowTrucks")
+        .innerText =
+        trucks.filter(
+            t => t.availableDate === tomorrow
+        ).length;
+
+
+    if (filtered.length === 0) {
+
+        list.innerHTML = `
+            <div class="empty">
+                <h3>No trucks available</h3>
+                <p>Add a truck using the "+ Add Truck" button.</p>
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    list.innerHTML = filtered.map(function(truck) {
+
+        return `
+
+            <div class="truck">
+
+                <div class="truck-top">
+
+                    <div class="truck-number">
+                        🚛 ${escapeHTML(truck.truckNumber)}
+                    </div>
+
+                    <div class="available">
+                        AVAILABLE
+                    </div>
+
+                </div>
+
+
+                <div class="info">
+
+                    <div>
+                        <strong>Driver</strong>
+                        ${escapeHTML(truck.driverName || "N/A")}
+                    </div>
+
+
+                    <div>
+                        <strong>Location</strong>
+                        📍 ${escapeHTML(truck.location)}
+                    </div>
+
+
+                    <div>
+                        <strong>Available Date</strong>
+                        📅 ${escapeHTML(truck.availableDate)}
+                    </div>
+
+
+                    <div>
+                        <strong>Available Time</strong>
+                        ⏰ ${escapeHTML(truck.availableTime || "N/A")}
+                    </div>
+
+
+                    <div>
+                        <strong>Destination</strong>
+                        🗺️ ${escapeHTML(truck.destination || "Any")}
+                    </div>
+
+
+                    <div>
+                        <strong>Truck Type</strong>
+                        🚚 ${escapeHTML(truck.truckType)}
+                    </div>
+
+                </div>
+
+
+                ${
+                    truck.notes
+                    ?
+                    `<p style="margin-top:15px;">
+                        <strong>Notes:</strong>
+                        ${escapeHTML(truck.notes)}
+                    </p>`
+                    :
+                    ""
+                }
+
+
+                ${
+                    truck.phone
+                    ?
+                    `<p style="margin-top:10px;">
+                        📞 ${escapeHTML(truck.phone)}
+                    </p>`
+                    :
+                    ""
+                }
+
+
+                <button
+                    class="delete-btn"
+                    onclick="deleteTruck(${truck.id})"
+                >
+                    Delete
+                </button>
+
+            </div>
+
+        `;
+
+    }).join("");
+
+}
+
+
+
+function deleteTruck(id) {
+
+    if (
+        !confirm(
+            "Are you sure you want to delete this truck?"
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    trucks =
+        trucks.filter(
+            truck => truck.id !== id
+        );
+
+
+    localStorage.setItem(
+        "preserverTrucks",
+        JSON.stringify(trucks)
+    );
+
+
+    displayTrucks();
+
+}
+
+
+
+function escapeHTML(value) {
+
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+
+displayTrucks();
+
+</script>
+
+</body>
+</html>
+```
